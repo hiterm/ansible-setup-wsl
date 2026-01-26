@@ -26,6 +26,7 @@
         - wget
         - zsh
         - git
+        - github-cli
         - fzf
         - openssh
         - ripgrep
