@@ -22,6 +22,7 @@
   - name: Install packages
     community.general.pacman:
       name:
+        - base-devel
         - wget
         - zsh
         - git
@@ -51,7 +52,7 @@
       create: yes
       mode: 0644
       validate: 'visudo -cf %s'
-  - name: Install paru using makepkg if it isn't installed already
+  - name: Install yay using makepkg if it isn't installed already
     kewlfft.aur.aur:
       name: yay-bin
       use: makepkg

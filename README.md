@@ -3,6 +3,7 @@
 ## setup
 
 ```
+sudo pacman -S ansible
 ansible-galaxy collection install -r requirements.yml
 ```
 
