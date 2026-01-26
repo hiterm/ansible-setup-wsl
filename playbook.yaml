@@ -34,6 +34,7 @@
         - sheldon
         - man-db
         - git-delta
+        - ghq
     become: yes
 
   - name: Create the `aur_builder` user
@@ -52,16 +53,16 @@
       validate: 'visudo -cf %s'
   - name: Install paru using makepkg if it isn't installed already
     kewlfft.aur.aur:
-      name: paru-bin
+      name: yay-bin
       use: makepkg
       state: present
     become: yes
     become_user: aur_builder
-  - name: Install AUR packages
-    kewlfft.aur.aur:
-      use: paru
-      name:
-        - ghq-bin
+  # - name: Install AUR packages
+  #   kewlfft.aur.aur:
+  #     use: yay
+  #     name:
+  #       - <package>
 
   - name: chsh
     ansible.builtin.command:
