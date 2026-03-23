@@ -3,22 +3,20 @@
   vars:
     username: hiterm
   tasks:
-  - name: Install packages
-    ansible.builtin.apt:
-      name:
-        - chezmoi
-      update_cache: yes
-    become: yes
+  - name: Install chezmoi
+    shell: sh -c "$(curl -fsLS get.chezmoi.io)"
+    args:
+      creates: "{{ ansible_env.HOME }}/bin/chezmoi"
   - name: chezmoi init
     ansible.builtin.command:
       argv:
-        - chezmoi
+        - "{{ ansible_env.HOME }}/bin/chezmoi"
         - init
         - hiterm/dotfiles-chezmoi
   - name: chezmoi apply
     ansible.builtin.command:
       argv:
-        - chezmoi
+        - "{{ ansible_env.HOME }}/bin/chezmoi"
         - apply
   - name: Install packages
     ansible.builtin.apt:
