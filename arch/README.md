@@ -1,4 +1,4 @@
-# ansible-setup-arch-wsl
+# ansible-setup-arch-wsl (Arch WSL)
 
 ## setup
 
