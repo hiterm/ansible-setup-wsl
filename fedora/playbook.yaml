@@ -43,6 +43,7 @@
         - zoxide
         - git-delta
         - man-db
+        - gawk
       state: present
       update_cache: yes
     become: yes
