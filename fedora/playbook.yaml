@@ -47,6 +47,18 @@
       update_cache: yes
     become: yes
 
+  - name: Enable COPR repository for mise
+    community.general.copr:
+      name: jdxcode/mise
+      state: enabled
+    become: yes
+
+  - name: Install mise
+    ansible.builtin.dnf:
+      name: mise
+      state: present
+    become: yes
+
   - name: chsh
     ansible.builtin.command:
       argv:
