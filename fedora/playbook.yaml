@@ -1,0 +1,70 @@
+- name: Setup Fedora WSL
+  hosts: localhost
+  vars:
+    username: hiterm
+  tasks:
+  - name: Install chezmoi
+    ansible.builtin.shell: sh -c "$(curl -fsLS get.chezmoi.io)" -- -b {{ ansible_env.HOME }}/.local/bin
+    args:
+      creates: "{{ ansible_env.HOME }}/.local/bin/chezmoi"
+
+  - name: chezmoi init
+    ansible.builtin.command:
+      argv:
+        - "{{ ansible_env.HOME }}/.local/bin/chezmoi"
+        - init
+        - hiterm/dotfiles-chezmoi
+  - name: chezmoi apply
+    ansible.builtin.command:
+      argv:
+        - "{{ ansible_env.HOME }}/.local/bin/chezmoi"
+        - apply
+
+  - name: Enable RPM Fusion free repository
+    ansible.builtin.dnf:
+      name: "https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-{{ ansible_distribution_major_version }}.noarch.rpm"
+      state: present
+      disable_gpg_check: true
+    become: yes
+
+  - name: Install packages
+    ansible.builtin.dnf:
+      name:
+        - "@development-tools"
+        - wget
+        - zsh
+        - git
+        - gh
+        - fzf
+        - openssh-clients
+        - ripgrep
+        - neovim
+        - bat
+        - zoxide
+        - git-delta
+        - man-db
+        - gawk
+      state: present
+      update_cache: yes
+    become: yes
+
+  - name: Enable COPR repository for mise
+    community.general.copr:
+      name: jdxcode/mise
+      state: enabled
+    become: yes
+
+  - name: Install mise
+    ansible.builtin.dnf:
+      name: mise
+      state: present
+    become: yes
+
+  - name: chsh
+    ansible.builtin.command:
+      argv:
+        - chsh
+        - -s
+        - /usr/bin/zsh
+        - "{{ username }}"
+    become: yes

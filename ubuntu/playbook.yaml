@@ -1,0 +1,46 @@
+- name: Setup Ubuntu WSL
+  hosts: localhost
+  vars:
+    username: hiterm
+  tasks:
+  - name: Install chezmoi
+    shell: sh -c "$(curl -fsLS get.chezmoi.io)" -- -b {{ ansible_env.HOME }}/bin
+    args:
+      creates: "{{ ansible_env.HOME }}/bin/chezmoi"
+  - name: chezmoi init
+    ansible.builtin.command:
+      argv:
+        - "{{ ansible_env.HOME }}/bin/chezmoi"
+        - init
+        - hiterm/dotfiles-chezmoi
+  - name: chezmoi apply
+    ansible.builtin.command:
+      argv:
+        - "{{ ansible_env.HOME }}/bin/chezmoi"
+        - apply
+  - name: Install packages
+    ansible.builtin.apt:
+      name:
+        - build-essential
+        - wget
+        - zsh
+        - git
+        - gh
+        - fzf
+        - openssh-client
+        - ripgrep
+        - neovim
+        - bat
+        - zoxide
+        - delta
+      update_cache: yes
+    become: yes
+
+  - name: chsh
+    ansible.builtin.command:
+      argv:
+        - chsh
+        - -s
+        - /usr/bin/zsh
+        - "{{ username }}"
+    become: yes
